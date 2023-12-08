@@ -1,0 +1,11 @@
+[package]
+name = "cch23-santa4586"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+rocket = { version = "0.5.0", features = ["json"] }
+shuttle-rocket = "0.35.0"
+shuttle-runtime = "0.35.0"
+tokio = "1.26.0"
