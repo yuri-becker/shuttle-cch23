@@ -233,6 +233,7 @@ dependencies = [
 name = "cch23-santa4586"
 version = "0.1.0"
 dependencies = [
+ "base64",
  "rocket",
  "serde",
  "shuttle-rocket",
