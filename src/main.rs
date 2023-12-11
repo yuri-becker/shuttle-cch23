@@ -5,12 +5,14 @@ use crate::day1::Day1;
 use crate::day4::Day4;
 use crate::day6::Day6;
 use crate::day7::Day7;
+use crate::day8::Day8;
 use crate::day_negative_1::DayNegative1;
 
 mod day1;
 mod day4;
 mod day6;
 mod day7;
+mod day8;
 mod day_negative_1;
 
 #[get("/")]
@@ -26,6 +28,7 @@ async fn main() -> shuttle_rocket::ShuttleRocket {
         .mount("/4", Day4::routes())
         .mount("/6", Day6::routes())
         .mount("/7", Day7::routes())
+        .mount("/8", Day8::routes())
         .mount("/", routes![index])
         .into())
 }
