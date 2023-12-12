@@ -1,11 +1,11 @@
+use std::io::Cursor;
+
 use image::GenericImageView;
-use image::ImageFormat;
 use rocket::form::Form;
 use rocket::fs::{relative, NamedFile, TempFile};
 use rocket::http::Status;
 use rocket::tokio::io::AsyncReadExt;
 use rocket::{get, post, routes, FromForm, Route};
-use std::io::Cursor;
 
 #[get("/assets/decoration.png")]
 async fn decoration() -> Result<NamedFile, Status> {
