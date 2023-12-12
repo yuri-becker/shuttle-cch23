@@ -20,7 +20,7 @@ pub fn decode(cookies: &CookieJar<'_>) -> Result<String, Status> {
 #[derive(Deserialize, Serialize, Debug)]
 struct Ingredients {
     #[serde(flatten)]
-    extra: HashMap<String, i32>,
+    extra: HashMap<String, i64>,
 }
 #[derive(Deserialize, Serialize, Debug)]
 struct Request {
@@ -28,9 +28,9 @@ struct Request {
     pantry: Ingredients,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 struct Response {
-    cookies: i32,
+    cookies: i64,
     pantry: Ingredients,
 }
 
@@ -60,8 +60,8 @@ fn bake(cookies: &CookieJar<'_>) -> Result<Json<Response>, Status> {
         .extra
         .iter()
         .map(|(key, value)| {
-            if value.clone() == 0 {
-                (key, 0)
+            if *value == 0 {
+                (key, i64::MAX)
             } else {
                 (key, request.pantry.extra.get(key).unwrap_or(&0) / value)
             }
@@ -70,7 +70,7 @@ fn bake(cookies: &CookieJar<'_>) -> Result<Json<Response>, Status> {
 
     let ingredient_limit = makeable_cookies_per_ingredient.values().min().unwrap_or(&0);
 
-    Ok(Json::from(Response {
+    let response = Response {
         cookies: *ingredient_limit,
         pantry: Ingredients {
             extra: request
@@ -85,7 +85,8 @@ fn bake(cookies: &CookieJar<'_>) -> Result<Json<Response>, Status> {
                 })
                 .collect::<HashMap<_, _>>(),
         },
-    }))
+    };
+    Ok(Json::from(response))
 }
 
 pub struct Day7 {}
