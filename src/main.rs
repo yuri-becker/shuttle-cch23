@@ -1,3 +1,4 @@
+use crate::day11::Day11;
 use rocket::http::Status;
 use rocket::{get, routes};
 
@@ -9,6 +10,7 @@ use crate::day8::Day8;
 use crate::day_negative_1::DayNegative1;
 
 mod day1;
+mod day11;
 mod day4;
 mod day6;
 mod day7;
@@ -29,6 +31,7 @@ async fn main() -> shuttle_rocket::ShuttleRocket {
         .mount("/6", Day6::routes())
         .mount("/7", Day7::routes())
         .mount("/8", Day8::routes())
+        .mount("/11", Day11::routes())
         .mount("/", routes![index])
         .into())
 }
