@@ -33,11 +33,14 @@ async fn get_pokedex_entry(pokedex_number: i32) -> Result<PokeApiResponse, Statu
 
 #[get("/weight/<pokedex_number>")]
 pub async fn get_weight(pokedex_number: i32) -> Result<String, Status> {
-    Ok((get_pokedex_entry(pokedex_number)
+    println!("get_weight({})", pokedex_number);
+    let weight = (get_pokedex_entry(pokedex_number)
         .await?
-        .weight_in_hectograms
-        / 10)
-        .to_string())
+        .weight_in_hectograms as f64
+        / 10.0)
+        .to_string();
+    println!("weight: {}", weight);
+    Ok(weight)
 }
 
 #[get("/drop/<pokedex_number>")]
