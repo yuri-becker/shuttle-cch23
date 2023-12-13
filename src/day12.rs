@@ -1,12 +1,12 @@
 use std::time::SystemTime;
 
+use crate::infrastructure::Infrastructure;
 use chrono::{DateTime, Datelike, Utc, Weekday};
 use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::serde::Deserialize;
 use rocket::{get, post, routes, Route, State};
 use serde::Serialize;
-use shuttle_persist::PersistInstance;
 use ulid::Ulid;
 use uuid::Uuid;
 
@@ -22,16 +22,17 @@ struct UlidGenerationDatesResponse {
 }
 
 #[post("/save/<key>")]
-fn store(key: &str, persist: &State<PersistInstance>) -> Status {
-    persist
+fn store(key: &str, infrastructure: &State<Infrastructure>) -> Status {
+    infrastructure
+        .persist
         .save(key, SystemTime::now())
         .map(|_| Status::Ok)
         .unwrap_or(Status::BadRequest)
 }
 
 #[get("/load/<key>")]
-fn load(key: &str, persist: &State<PersistInstance>) -> Result<String, Status> {
-    let persisted_value = persist.load::<SystemTime>(key);
+fn load(key: &str, infrastructure: &State<Infrastructure>) -> Result<String, Status> {
+    let persisted_value = infrastructure.persist.load::<SystemTime>(key);
     println!("Persisted value: {:?}", persisted_value);
     persisted_value
         .map(|value| SystemTime::now().duration_since(value).unwrap())
