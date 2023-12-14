@@ -1,5 +1,6 @@
 use rocket::http::Status;
 use rocket::{get, routes};
+use rocket_dyn_templates::Template;
 use shuttle_persist::PersistInstance;
 use sqlx::PgPool;
 
@@ -7,6 +8,7 @@ use crate::day1::Day1;
 use crate::day11::Day11;
 use crate::day12::Day12;
 use crate::day13::Day13;
+use crate::day14::Day14;
 use crate::day4::Day4;
 use crate::day6::Day6;
 use crate::day7::Day7;
@@ -18,6 +20,7 @@ mod day1;
 mod day11;
 mod day12;
 mod day13;
+mod day14;
 mod day4;
 mod day6;
 mod day7;
@@ -46,6 +49,8 @@ async fn main(
         .mount("/11", Day11::routes())
         .mount("/12", Day12::routes())
         .mount("/13", Day13::routes())
+        .mount("/14", Day14::routes())
         .mount("/", routes![index])
+        .attach(Template::fairing())
         .into())
 }
