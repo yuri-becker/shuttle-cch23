@@ -9,6 +9,7 @@ use crate::day11::Day11;
 use crate::day12::Day12;
 use crate::day13::Day13;
 use crate::day14::Day14;
+use crate::day15::Day15;
 use crate::day4::Day4;
 use crate::day6::Day6;
 use crate::day7::Day7;
@@ -21,6 +22,7 @@ mod day11;
 mod day12;
 mod day13;
 mod day14;
+mod day15;
 mod day4;
 mod day6;
 mod day7;
@@ -50,6 +52,7 @@ async fn main(
         .mount("/12", Day12::routes())
         .mount("/13", Day13::routes())
         .mount("/14", Day14::routes())
+        .mount("/15", Day15::routes())
         .mount("/", routes![index])
         .attach(Template::fairing())
         .into())
