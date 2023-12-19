@@ -21,3 +21,4 @@ sqlx = { version = "0.7.3", features = ["postgres", "runtime-tokio-native-tls"] 
 rocket_dyn_templates = { version = "0.1.0", features = ["handlebars"] }
 sha256 = "1.4.0"
 regex = "1.10.2"
+rocket_ws = "0.1.0"
