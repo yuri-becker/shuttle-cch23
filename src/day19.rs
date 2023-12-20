@@ -1,14 +1,17 @@
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::RwLock;
 
-use rocket::{get, post, Route, routes, Shutdown, State};
+use rocket::futures::StreamExt;
+use rocket::serde::json::serde_json;
 use rocket::serde::{Deserialize, Serialize};
-use rocket::serde::json::{serde_json};
+use rocket::{get, post, routes, Route, Shutdown, State};
 use rocket_ws::{Message, Stream, WebSocket};
-use tokio::{select, sync::broadcast::{channel, Sender}};
 use tokio::sync::broadcast::error::RecvError;
 use tokio::sync::broadcast::Receiver;
-use rocket::futures::StreamExt;
+use tokio::{
+    select,
+    sync::broadcast::{channel, Sender},
+};
 
 #[derive(PartialEq, Debug)]
 enum PingState {
@@ -130,7 +133,6 @@ fn bird_app_connect<'a>(
     }
 }
 
-
 pub struct Day19 {
     ping_state: RwLock<PingState>,
     twit_views: AtomicU64,
@@ -144,25 +146,23 @@ impl Day19 {
 
     fn ping_pong(&self, message: Message) -> Option<Message> {
         match message {
-            Message::Text(text) => {
-                match text.as_str() {
-                    "serve" => {
-                        let mut ping_state = self.ping_state.write().unwrap();
-                        *ping_state = PingState::Started;
+            Message::Text(text) => match text.as_str() {
+                "serve" => {
+                    let mut ping_state = self.ping_state.write().unwrap();
+                    *ping_state = PingState::Started;
+                    None
+                }
+                "ping" => {
+                    let it = self.ping_state.read().unwrap();
+                    if *it == PingState::Started {
+                        Some(Message::Text(String::from("pong")))
+                    } else {
                         None
                     }
-                    "ping" => {
-                        let it = self.ping_state.read().unwrap();
-                        if *it == PingState::Started {
-                            Some(Message::Text(String::from("pong")))
-                        } else {
-                            None
-                        }
-                    }
-                    _ => None
                 }
-            }
-            _ => None
+                _ => None,
+            },
+            _ => None,
         }
     }
 
@@ -175,7 +175,9 @@ impl Day19 {
     }
 
     fn log_view(&self) {
-        self.twit_views.fetch_update(Ordering::SeqCst, Ordering::SeqCst, |views| Some(views + 1)).expect("Failed to increment views");
+        self.twit_views
+            .fetch_update(Ordering::SeqCst, Ordering::SeqCst, |views| Some(views + 1))
+            .expect("Failed to increment views");
     }
 }
 

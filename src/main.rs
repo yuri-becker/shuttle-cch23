@@ -1,5 +1,6 @@
+use rocket::data::{ByteUnit, Limits};
 use rocket::http::Status;
-use rocket::{get, routes};
+use rocket::{get, routes, Config};
 use rocket_dyn_templates::Template;
 use shuttle_persist::PersistInstance;
 use sqlx::PgPool;
@@ -12,6 +13,7 @@ use crate::day14::Day14;
 use crate::day15::Day15;
 use crate::day18::Day18;
 use crate::day19::Day19;
+use crate::day20::Day20;
 use crate::day4::Day4;
 use crate::day6::Day6;
 use crate::day7::Day7;
@@ -27,6 +29,7 @@ mod day14;
 mod day15;
 mod day18;
 mod day19;
+mod day20;
 mod day4;
 mod day6;
 mod day7;
@@ -60,8 +63,12 @@ async fn main(
         .mount("/15", Day15::routes())
         .mount("/18", Day18::routes())
         .mount("/19", Day19::routes())
+        .mount("/20", Day20::routes())
         .mount("/", routes![index])
         .attach(Template::fairing())
+        .configure(Config {
+            limits: Limits::default().limit("file", ByteUnit::Megabyte(512)),
+            ..Default::default()
+        })
         .into())
 }
-
