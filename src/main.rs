@@ -14,6 +14,7 @@ use crate::day15::Day15;
 use crate::day18::Day18;
 use crate::day19::Day19;
 use crate::day20::Day20;
+use crate::day21::Day21;
 use crate::day4::Day4;
 use crate::day6::Day6;
 use crate::day7::Day7;
@@ -30,7 +31,9 @@ mod day15;
 mod day18;
 mod day19;
 mod day20;
+mod day21;
 mod day4;
+mod day5;
 mod day6;
 mod day7;
 mod day8;
@@ -50,6 +53,7 @@ async fn main(
     Ok(rocket::build()
         .manage(Infrastructure { postgres, persist })
         .manage(Day19::default())
+        .manage(Day21::default())
         .mount("/-1", DayNegative1::routes())
         .mount("/1", Day1::routes())
         .mount("/4", Day4::routes())
@@ -64,6 +68,7 @@ async fn main(
         .mount("/18", Day18::routes())
         .mount("/19", Day19::routes())
         .mount("/20", Day20::routes())
+        .mount("/21", Day21::routes())
         .mount("/", routes![index])
         .attach(Template::fairing())
         .configure(Config {
