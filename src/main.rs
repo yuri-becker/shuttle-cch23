@@ -16,6 +16,7 @@ use crate::day19::Day19;
 use crate::day20::Day20;
 use crate::day21::Day21;
 use crate::day4::Day4;
+use crate::day5::Day5;
 use crate::day6::Day6;
 use crate::day7::Day7;
 use crate::day8::Day8;
@@ -57,6 +58,7 @@ async fn main(
         .mount("/-1", DayNegative1::routes())
         .mount("/1", Day1::routes())
         .mount("/4", Day4::routes())
+        .mount("/5", Day5::routes())
         .mount("/6", Day6::routes())
         .mount("/7", Day7::routes())
         .mount("/8", Day8::routes())
