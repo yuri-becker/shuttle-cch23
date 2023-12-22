@@ -15,6 +15,7 @@ use crate::day18::Day18;
 use crate::day19::Day19;
 use crate::day20::Day20;
 use crate::day21::Day21;
+use crate::day22::Day22;
 use crate::day4::Day4;
 use crate::day5::Day5;
 use crate::day6::Day6;
@@ -33,6 +34,7 @@ mod day18;
 mod day19;
 mod day20;
 mod day21;
+mod day22;
 mod day4;
 mod day5;
 mod day6;
@@ -71,10 +73,13 @@ async fn main(
         .mount("/19", Day19::routes())
         .mount("/20", Day20::routes())
         .mount("/21", Day21::routes())
+        .mount("/22", Day22::routes())
         .mount("/", routes![index])
         .attach(Template::fairing())
         .configure(Config {
-            limits: Limits::default().limit("file", ByteUnit::Megabyte(512)),
+            limits: Limits::default()
+                .limit("file", ByteUnit::Megabyte(512))
+                .limit("string", ByteUnit::Megabyte(512)),
             ..Default::default()
         })
         .into())
