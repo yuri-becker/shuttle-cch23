@@ -23,6 +23,7 @@ use crate::day7::Day7;
 use crate::day8::Day8;
 use crate::day_negative_1::DayNegative1;
 use crate::infrastructure::Infrastructure;
+use crate::tiebreaker::Tiebreaker;
 
 mod day1;
 mod day11;
@@ -42,6 +43,7 @@ mod day7;
 mod day8;
 mod day_negative_1;
 mod infrastructure;
+mod tiebreaker;
 
 #[get("/")]
 fn index() -> Status {
@@ -74,6 +76,7 @@ async fn main(
         .mount("/20", Day20::routes())
         .mount("/21", Day21::routes())
         .mount("/22", Day22::routes())
+        .mount("/tiebreaker", Tiebreaker::routes())
         .mount("/", routes![index])
         .attach(Template::fairing())
         .configure(Config {
